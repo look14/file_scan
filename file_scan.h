@@ -9,11 +9,11 @@
 #define MAX_FILE_PATH_SIZE  256
 
 typedef struct file_scan_s {
-	int all_count;
-	int file_count;
-	int dir_count;
-	struct file_scan_s** dirs;
-	char path[MAX_FILE_PATH_SIZE];
+    int all_count;
+    int file_count;
+    int dir_count;
+    struct file_scan_s** dirs;
+    char path[MAX_FILE_PATH_SIZE];
 
 } file_scan_t;
 

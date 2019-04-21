@@ -2,61 +2,61 @@
 
 com_queue_t* com_queue_create(void)
 {
-	com_queue_t* com_queue = (com_queue_t*)calloc(sizeof(com_queue_t), 1);
+    com_queue_t* com_queue = (com_queue_t*)calloc(sizeof(com_queue_t), 1);
 
-	if(NULL == com_queue)
-		return NULL;
+    if(NULL == com_queue)
+        return NULL;
 
-	return com_queue;
+    return com_queue;
 }
 
 void com_queue_destroy(com_queue_t** pp_com_queue)
 {
-	com_queue_t* com_queue = (pp_com_queue) ?(*pp_com_queue) :NULL;
+    com_queue_t* com_queue = (pp_com_queue) ?(*pp_com_queue) :NULL;
 
-	if(NULL == com_queue)
-		return;
+    if(NULL == com_queue)
+        return;
 
-	free(com_queue);
-	*pp_com_queue = NULL;
+    free(com_queue);
+    *pp_com_queue = NULL;
 }
 
 int com_queue_push(com_queue_t* com_queue, void* data)
 {
-	com_queue_node_t* tmp = (com_queue_node_t*)calloc(sizeof(com_queue_node_t), 1);
+    com_queue_node_t* tmp = (com_queue_node_t*)calloc(sizeof(com_queue_node_t), 1);
 
-	if(NULL == tmp)
-		return -1;
+    if(NULL == tmp)
+        return -1;
 
-	tmp->data = data;
+    tmp->data = data;
 
-	if(NULL == com_queue->head)
-		com_queue->head = tmp;
-	else
-		com_queue->tail->next = tmp;
+    if(NULL == com_queue->head)
+        com_queue->head = tmp;
+    else
+        com_queue->tail->next = tmp;
 
-	com_queue->tail = tmp;
+    com_queue->tail = tmp;
 
-	return 0;
+    return 0;
 }
 
 void* com_queue_pop(com_queue_t* com_queue)
 {
-	com_queue_node_t* tmp;
-	void* data;
+    com_queue_node_t* tmp;
+    void* data;
 
-	if(NULL == com_queue->head)
-		return NULL;
+    if(NULL == com_queue->head)
+        return NULL;
 
-	tmp = com_queue->head;
-	data = tmp->data;
+    tmp = com_queue->head;
+    data = tmp->data;
 
-	com_queue->head = com_queue->head->next;
+    com_queue->head = com_queue->head->next;
 
-	if(NULL == com_queue->head)
-		com_queue->tail = NULL;
+    if(NULL == com_queue->head)
+        com_queue->tail = NULL;
 
-	free(tmp);
+    free(tmp);
 
-	return data;
+    return data;
 }

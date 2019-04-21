@@ -22,7 +22,7 @@ file_scan_t* file_scan_create(const char* base_path)
 
     com_queue = com_queue_create();
     if(NULL == com_queue)
-    	goto END;
+        goto END;
 
     while(NULL != (ptr = readdir(dir)))
     {
@@ -35,9 +35,9 @@ file_scan_t* file_scan_create(const char* base_path)
             if(NULL != str)
             {
                 snprintf(str, MAX_FILE_PATH_SIZE, "%s/%s", base_path, ptr->d_name);
-            	com_queue_push(com_queue, str);
+                com_queue_push(com_queue, str);
 
-            	file_scan->dir_count++;
+                file_scan->dir_count++;
             }
         }
         else
@@ -52,45 +52,45 @@ file_scan_t* file_scan_create(const char* base_path)
     count = 0;
     while(false == com_queue_empty(com_queue))
     {
-    	if(NULL == (str = com_queue_pop(com_queue)))
-    		continue;
+        if(NULL == (str = com_queue_pop(com_queue)))
+            continue;
 
-    	file_scan->dirs[count] = file_scan_create(str);
+        file_scan->dirs[count] = file_scan_create(str);
 
-    	if(NULL != file_scan->dirs[count]) {
-    		file_scan->all_count += file_scan->dirs[count]->all_count;
-    		count++;
-    	}
+        if(NULL != file_scan->dirs[count]) {
+            file_scan->all_count += file_scan->dirs[count]->all_count;
+            count++;
+        }
 
-    	free(str);
+        free(str);
     }
 
 END:
-	if(NULL != com_queue)
-	{
-		while(false == com_queue_empty(com_queue))
-			com_queue_pop(com_queue);
-		com_queue_destroy(&com_queue);
-	}
+    if(NULL != com_queue)
+    {
+        while(false == com_queue_empty(com_queue))
+            com_queue_pop(com_queue);
+        com_queue_destroy(&com_queue);
+    }
     if(NULL != dir)
-    	closedir(dir);
+        closedir(dir);
 
     return file_scan;
 }
 
 void file_scan_destroy(file_scan_t** pp_file_scan)
 {
-	int i;
+    int i;
     file_scan_t* file_scan = (pp_file_scan) ?(*pp_file_scan) :NULL;
 
     if(NULL == file_scan)
         return;
 
     for(i = 0; i < file_scan->dir_count; i++)
-    	file_scan_destroy(&file_scan->dirs[i]);
+        file_scan_destroy(&file_scan->dirs[i]);
 
     if(NULL != file_scan->dirs)
-    	free(file_scan->dirs);
+        free(file_scan->dirs);
 
     free(file_scan);
     *pp_file_scan = NULL;
@@ -99,20 +99,20 @@ void file_scan_destroy(file_scan_t** pp_file_scan)
 int file_scan_get_path(file_scan_t* file_scan, int pos, char path[], int size)
 {
     int i, tmp, ret = -1;
-	DIR* dir = NULL;
+    DIR* dir = NULL;
     struct dirent* ptr = NULL;
 
-	if(pos >= file_scan->all_count)
-		return ret;
+    if(pos >= file_scan->all_count)
+        return ret;
 
     tmp = file_scan->all_count - file_scan->file_count;
 
-	if(pos >= tmp)
-	{
-		pos -= tmp;
+    if(pos >= tmp)
+    {
+        pos -= tmp;
 
-		if(NULL != (dir = opendir(file_scan->path)))
-		{
+        if(NULL != (dir = opendir(file_scan->path)))
+        {
             while(NULL != (ptr = readdir(dir)))
             {
                 if(0 == (DT_DIR & ptr->d_type))
@@ -126,10 +126,10 @@ int file_scan_get_path(file_scan_t* file_scan, int pos, char path[], int size)
                 }
             }
 
-			closedir(dir);
-		}
+            closedir(dir);
+        }
 
-	}
+    }
     else
     {
         for(i = 0; i < file_scan->dir_count; i++)
@@ -143,6 +143,6 @@ int file_scan_get_path(file_scan_t* file_scan, int pos, char path[], int size)
         }
     }
 
-	return ret;
+    return ret;
 }
 
