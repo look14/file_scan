@@ -98,18 +98,16 @@ void file_scan_destroy(file_scan_t** pp_file_scan)
 
 int file_scan_get_path(file_scan_t* file_scan, int pos, char path[], int size)
 {
-    int i, tmp, ret = -1;
+    int i, ret = -1;
     DIR* dir = NULL;
     struct dirent* ptr = NULL;
 
-    if(pos >= file_scan->all_count)
+    if(NULL == file_scan || pos >= file_scan->all_count)
         return ret;
 
-    tmp = file_scan->all_count - file_scan->file_count;
-
-    if(pos >= tmp)
+    if(pos >= file_scan->all_count - file_scan->file_count)
     {
-        pos -= tmp;
+        pos -= file_scan->all_count - file_scan->file_count;
 
         if(NULL != (dir = opendir(file_scan->path)))
         {
